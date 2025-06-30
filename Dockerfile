@@ -1,19 +1,13 @@
 FROM node:latest
 
-WORKDIR /home/choreouser
-
 EXPOSE 8080
 
-COPY index.js package.json /home/choreouser/
+WORKDIR /app
 
-RUN apt-get update &&\
-    apt-get install -y iproute2 vim netcat-openbsd &&\
-    addgroup --gid 10001 choreo &&\
-    adduser --disabled-password  --no-create-home --uid 10001 --ingroup choreo choreouser &&\
-    usermod -aG sudo choreouser &&\
+COPY . .
+
+RUN apt update -y &&\
     chmod +x index.js &&\
-    npm install -r package.json
+    npm install 
 
-CMD [ "node", "index.js" ]
-
-USER 10001
+CMD ["npm", "start"]
